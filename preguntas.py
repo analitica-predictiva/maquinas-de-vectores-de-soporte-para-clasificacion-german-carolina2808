@@ -153,6 +153,11 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import confusion_matrix
 
+import numpy as np
+import pandas as pd
+from sklearn.compose import make_column_selector
+
+
 def pregunta_01():
     """
     En esta función se realiza la carga de datos.
@@ -172,6 +177,7 @@ def pregunta_01():
     # Retorne `X` y `y`
     return X, y
 
+
 def pregunta_02():
     """
     Preparación del dataset.
@@ -188,12 +194,13 @@ def pregunta_02():
     (X_train, X_test, y_train, y_test,) = train_test_split(
         X,
         y,
-        test_size=0.1,
+        test_size=100,
         random_state=123,
     )
 
     # Retorne `X_train`, `X_test`, `y_train` y `y_test`
     return X_train, X_test, y_train, y_test
+
 
 def pregunta_03():
     """
@@ -207,7 +214,7 @@ def pregunta_03():
     from sklearn.compose import make_column_transformer
     from sklearn.svm import SVC
     from sklearn.preprocessing import OneHotEncoder
-    from sklearn.pipeline import make_pipeline
+    from sklearn.pipeline import Pipeline
 
     # Cargue las variables.
     X_train, _, y_train, _ = pregunta_02()
@@ -218,22 +225,25 @@ def pregunta_03():
     columnTransformer = make_column_transformer(
         (
             OneHotEncoder(),
-            make_column_selector(dtype_include='object'),
+            make_column_selector(dtype_include=object),
         ),
         remainder='passthrough',
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
-    pipeline = make_pipeline(
-        ("preprocessor", columnTransformer),
-        ("classifier", SVC()),
+    pipeline = Pipeline(
+        steps=[
+            ("preprocessor", columnTransformer),
+            ("classifier", SVC()),
+        ],
     )
 
     # Entrene el pipeline con los datos de entrenamiento.
     pipeline.fit(X_train, y_train)
 
-    # Retorne el pipeline entrenado
+    # # Retorne el pipeline entrenado
     return pipeline
+
 
 def pregunta_04():
     """
