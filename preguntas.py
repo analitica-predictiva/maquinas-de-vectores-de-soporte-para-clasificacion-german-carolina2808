@@ -218,7 +218,7 @@ def pregunta_03():
     columnTransformer = make_column_transformer(
         (
             OneHotEncoder(),
-            make_column_selector(dtype_include=object),
+            make_column_selector(dtype_include='object'),
         ),
         remainder='passthrough',
     )
